@@ -81,11 +81,11 @@ fpath=(
   $fpath
 )
 
-source $ZSH/oh-my-zsh.sh
-
-# User configuration
 path=(
   "$HOME/.local/bin"
   "$HOME/bin"
   $path
 )
+
+source $ZSH/oh-my-zsh.sh
+
