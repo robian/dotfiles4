@@ -1,0 +1,13 @@
+#!/bin/sh
+# mise config hash: {{ include "dot_config/mise/config.toml" | sha256sum }}
+set -eu
+
+export PATH="$HOME/.local/bin:$PATH"
+
+if ! command -v mise >/dev/null 2>&1; then
+  echo "dotfiles: mise is not installed; skipping mise-managed tools."
+  exit 0
+fi
+
+echo "dotfiles: installing mise-managed tools."
+mise install

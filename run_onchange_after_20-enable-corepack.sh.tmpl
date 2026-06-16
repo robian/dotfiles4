@@ -1,0 +1,21 @@
+#!/bin/sh
+# mise config hash: {{ include "dot_config/mise/config.toml" | sha256sum }}
+set -eu
+
+export PATH="$HOME/.local/bin:$PATH"
+
+if ! command -v mise >/dev/null 2>&1; then
+  echo "dotfiles: mise is not installed; skipping corepack setup."
+  exit 0
+fi
+
+corepack="$(mise which corepack 2>/dev/null || true)"
+
+if [ -z "$corepack" ]; then
+  echo "dotfiles: corepack is not available; skipping pnpm setup."
+  exit 0
+fi
+
+echo "dotfiles: enabling corepack and pnpm."
+"$corepack" enable
+"$corepack" prepare pnpm@latest --activate

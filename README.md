@@ -14,9 +14,11 @@ Update an existing machine:
 chezmoi update --apply
 ```
 
-After applying, reload zsh and install configured mise tools:
+After applying, reload zsh:
 
 ```sh
 exec zsh
-mise install
 ```
+
+Chezmoi scripts install mise, run `mise install`, and enable Corepack/pnpm
+after the mise config has been written.

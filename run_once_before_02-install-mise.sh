@@ -12,4 +12,3 @@ fi
 mkdir -p "$HOME/.local/bin"
 
 curl https://mise.run | sh
-
