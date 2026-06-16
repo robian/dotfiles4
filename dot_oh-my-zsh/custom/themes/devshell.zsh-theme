@@ -3,6 +3,7 @@
 setopt prompt_subst
 
 PROMPT="%(?:%{$fg_bold[green]%}➜ :%{$fg_bold[red]%}➜ )"
+PROMPT+="%{$fg_bold[green]%}%n@%m%{$reset_color%} "
 PROMPT+='%{$fg_bold[red]%}${SSH_AUTH_SOCK:+agent }%{$reset_color%}'
 PROMPT+=' %{$fg[cyan]%}%~%{$reset_color%} $(git_prompt_info)
 '
