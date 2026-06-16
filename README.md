@@ -20,5 +20,6 @@ After applying, reload zsh:
 exec zsh
 ```
 
-Chezmoi scripts install mise, run `mise install`, and enable Corepack/pnpm
-after the mise config has been written.
+Chezmoi scripts install mise, run `mise install`, enable Corepack/pnpm, and
+install the Codex CLI after the mise config has been written. `~/.zshenv`
+keeps `~/.local/bin` and mise shims on `PATH` for non-interactive SSH commands.
