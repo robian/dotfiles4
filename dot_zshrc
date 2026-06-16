@@ -1,15 +1,6 @@
 # Managed by chezmoi.
 
 export PATH="$HOME/.local/bin:$PATH"
-
-if [ -d "$HOME/.local/share/zsh/site-functions" ]; then
-  fpath=("$HOME/.local/share/zsh/site-functions" $fpath)
-fi
-
-if command -v mise >/dev/null 2>&1; then
-  eval "$(mise activate zsh)"
-fi
-
 export ZSH="$HOME/.oh-my-zsh"
 export ZSH_CUSTOM="$HOME/.config/oh-my-zsh/custom"
 
@@ -17,6 +8,8 @@ ZSH_THEME="devshell"
 
 plugins=(
   git
+  mise
+  uv
 )
 
 if [ -r "$ZSH/oh-my-zsh.sh" ]; then
