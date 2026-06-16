@@ -14,3 +14,9 @@ Update an existing machine:
 chezmoi update --apply
 ```
 
+After applying, reload zsh and install configured mise tools:
+
+```sh
+exec zsh
+mise install
+```

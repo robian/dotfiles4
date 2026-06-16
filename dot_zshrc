@@ -1,5 +1,11 @@
 # Managed by chezmoi.
 
+export PATH="$HOME/.local/bin:$PATH"
+
+if command -v mise >/dev/null 2>&1; then
+  eval "$(mise activate zsh)"
+fi
+
 export ZSH="$HOME/.oh-my-zsh"
 export ZSH_CUSTOM="$HOME/.config/oh-my-zsh/custom"
 
