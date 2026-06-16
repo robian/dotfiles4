@@ -1,24 +1,24 @@
 # Managed by chezmoi.
 
-autoload -Uz colors && colors
-
 setopt prompt_subst
 
-function devshell_prompt_identity() {
-  local identity_color="$fg_bold[green]"
+function devshell_set_prompt() {
+  local identity_color="green"
 
   if [[ -n "${SSH_AUTH_SOCK:-}" ]]; then
-    identity_color="$fg_bold[red]"
+    identity_color="red"
   fi
 
-  print -r -- "%{${identity_color}%}%n@%m%{$reset_color%} "
+  PROMPT="%B%F{${identity_color}}%n@%m%f%b %F{cyan}%~%f "
+  PROMPT+='$(git_prompt_info)'
+  PROMPT+=$'\n%(?.%B%F{green}➜%f%b .%B%F{red}➜%f%b )'
 }
 
-PROMPT='$(devshell_prompt_identity)%{$fg[cyan]%}%~%{$reset_color%} '
-PROMPT+='$(git_prompt_info)'
-PROMPT+=$'\n%(?:%{$fg_bold[green]%}➜%{$reset_color%} :%{$fg_bold[red]%}➜%{$reset_color%} )'
+autoload -Uz add-zsh-hook
+add-zsh-hook precmd devshell_set_prompt
+devshell_set_prompt
 
-ZSH_THEME_GIT_PROMPT_PREFIX="%{$fg_bold[blue]%}git:(%{$fg[red]%}"
-ZSH_THEME_GIT_PROMPT_SUFFIX="%{$reset_color%} "
-ZSH_THEME_GIT_PROMPT_DIRTY="%{$fg[blue]%}) %{$fg[yellow]%}✗%{$reset_color%}"
-ZSH_THEME_GIT_PROMPT_CLEAN="%{$fg[blue]%})%{$reset_color%}"
+ZSH_THEME_GIT_PROMPT_PREFIX="%B%F{blue}git:(%F{red}"
+ZSH_THEME_GIT_PROMPT_SUFFIX="%f%b "
+ZSH_THEME_GIT_PROMPT_DIRTY="%F{blue}) %F{yellow}✗%f"
+ZSH_THEME_GIT_PROMPT_CLEAN="%F{blue})%f"
