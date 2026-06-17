@@ -1,0 +1,13 @@
+# This is Git's per-user configuration file.
+[user]
+# Please adapt and uncomment the following lines:
+name = robian
+email = 288016+robian@users.noreply.github.com
+
+[core]
+	editor = nvim
+	pager = cat
+[pager]
+	branch = false
+[alias]
+	wt = "!f() { \\\n  base=\"${2:-origin/main}\"; \\\n  git worktree add -b \"$1\" \"$1\" \"$base\"; \\\n}; f"
