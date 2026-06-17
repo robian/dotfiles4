@@ -1,4 +1,4 @@
 [tools]
 neovim = "0.12.3"
-node = "lts"
-uv = "latest"
+node = "24.16.0"
+uv = "0.11.21"
