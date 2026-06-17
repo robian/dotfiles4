@@ -1,6 +1,7 @@
 [tools]
 neovim = "0.12.3"
 node = "24.16.0"
+python = "latest"
 rust = { version = "stable", profile = "default", components = "rust-analyzer" }
 tree-sitter = "0.26.9"
 usage = "3.5.0"
