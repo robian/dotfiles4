@@ -1,5 +1,5 @@
 [tools]
 neovim = "0.12.3"
 node = "24.16.0"
-usage = "latest"
+usage = "3.5.0"
 uv = "0.11.21"
