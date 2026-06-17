@@ -1,6 +1,6 @@
 [tools]
 neovim = "0.12.3"
 node = "24.16.0"
-tree-sitter = "latest"
+tree-sitter = "0.26.9"
 usage = "3.5.0"
 uv = "0.11.21"
