@@ -1,7 +1,7 @@
 [tools]
 codex = "0.142.0"
 neovim = "0.12.3"
-node = "26.4.0"
+node = "24.16.0"
 python = "3.14.6"
 rust = { version = "1.96.0", profile = "default", components = "rust-analyzer" }
 tree-sitter = "0.26.9"
