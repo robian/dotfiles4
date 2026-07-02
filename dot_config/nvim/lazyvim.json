@@ -2,7 +2,9 @@
   "extras": [
     "lazyvim.plugins.extras.lang.python",
     "lazyvim.plugins.extras.lang.rust",
-    "lazyvim.plugins.extras.lang.typescript"
+    "lazyvim.plugins.extras.lang.tailwind",
+    "lazyvim.plugins.extras.lang.typescript",
+    "lazyvim.plugins.extras.lang.typescript.biome"
   ],
   "install_version": 8,
   "news": {
