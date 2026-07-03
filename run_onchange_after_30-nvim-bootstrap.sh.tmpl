@@ -1,0 +1,12 @@
+#!/bin/sh
+set -eu
+
+export PATH="$HOME/.local/bin:$PATH"
+
+if ! command -v mise >/dev/null 2>&1; then
+  echo "dotfiles: mise is not installed; skipping nvim bootstrap."
+  exit 0
+fi
+
+echo "dotfiles: bootstrapping nvim plugins."
+mise exec -- nvim --headless "+Lazy! sync" +qa
