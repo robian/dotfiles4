@@ -9,4 +9,4 @@ if ! command -v mise >/dev/null 2>&1; then
 fi
 
 echo "dotfiles: bootstrapping nvim plugins."
-mise exec -- nvim --headless "+Lazy! sync" +qa
+mise exec -- nvim --headless "+Lazy! restore" +qa
