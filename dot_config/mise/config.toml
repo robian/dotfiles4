@@ -1,9 +1,10 @@
 [tools]
-codex = "0.142.4"
+# codex = "0.143.0"
+codex = { version = "0.144.1", minimum_release_age = "0s" }
 neovim = "0.12.4"
 node = "24.16.0"
 python = "3.14.6"
 rust = { version = "1.96.1", profile = "default", components = "rust-analyzer" }
 tree-sitter = "0.26.10"
-usage = "3.5.3"
-uv = "0.11.26"
+usage = "3.5.4"
+uv = "0.11.28"
