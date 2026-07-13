@@ -1,6 +1,6 @@
 [tools]
 # codex = "0.143.0"
-codex = { version = "0.144.1", minimum_release_age = "0s" }
+codex = { version = "0.144.2", minimum_release_age = "0s" }
 neovim = "0.12.4"
 node = "24.16.0"
 python = "3.14.6"
