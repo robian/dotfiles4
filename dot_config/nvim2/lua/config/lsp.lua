@@ -14,6 +14,9 @@ require("config.python.ruff").setup()
 -- Install all supported servers up front. Root callbacks select one Python
 -- typechecker per project and independently opt into Ruff linting.
 local servers = vim.list_extend({ "lua_ls", "ruff" }, python.servers)
+local web = require("config.web")
+web.setup()
+vim.list_extend(servers, web.servers)
 
 require("mason-lspconfig").setup({
   ensure_installed = servers,

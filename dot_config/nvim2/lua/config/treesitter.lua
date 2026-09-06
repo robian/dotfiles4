@@ -1,18 +1,31 @@
 local treesitter = require("nvim-treesitter")
 -- NVIM_APPNAME keeps these parsers/queries separate from the old config.
 treesitter.setup({ install_dir = vim.fn.stdpath("data") .. "/site" })
-local languages = { "python", "rust" }
+local parsers = { "python", "rust", "javascript", "typescript", "tsx", "jsdoc", "css", "html", "json" }
+-- Filetypes and parser names differ for JSX/TSX.
+local languages = {
+  python = "python",
+  rust = "rust",
+  javascript = "javascript",
+  javascriptreact = "javascript",
+  typescript = "typescript",
+  typescriptreact = "tsx",
+  css = "css",
+  html = "html",
+  json = "json",
+  jsonc = "json",
+}
 
 local function highlight(bufnr)
-  if vim.api.nvim_buf_is_loaded(bufnr) and vim.tbl_contains(languages, vim.bo[bufnr].filetype) then
+  if vim.api.nvim_buf_is_loaded(bufnr) and languages[vim.bo[bufnr].filetype] then
     -- On first startup the parser may still be installing; retry below.
-    pcall(vim.treesitter.start, bufnr)
+    pcall(vim.treesitter.start, bufnr, languages[vim.bo[bufnr].filetype])
   end
 end
 
 vim.api.nvim_create_autocmd("FileType", {
   group = vim.api.nvim_create_augroup("nvim2_treesitter", { clear = true }),
-  pattern = languages,
+  pattern = vim.tbl_keys(languages),
   callback = function(ev)
     highlight(ev.buf)
   end,
@@ -20,7 +33,7 @@ vim.api.nvim_create_autocmd("FileType", {
 
 -- Install missing parsers, without updating them on every startup. Lua already
 -- has a parser, queries and highlighting enabled by Neovim's own ftplugin.
-treesitter.install(languages):await(vim.schedule_wrap(function(err, success)
+treesitter.install(parsers):await(vim.schedule_wrap(function(err, success)
   if err or success == false then
     vim.notify("Tree-sitter installation failed; see :TSLog", vim.log.levels.ERROR)
     return

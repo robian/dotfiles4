@@ -4,6 +4,20 @@ local languages = {
   python = require("config.formatting.python"),
   rust = require("config.formatting.rust"),
 }
+local web = require("config.formatting.web")
+for _, ft in ipairs({
+  "javascript",
+  "javascriptreact",
+  "typescript",
+  "typescriptreact",
+  "css",
+  "scss",
+  "json",
+  "jsonc",
+  "html",
+}) do
+  languages[ft] = web
+end
 local conform = require("conform")
 local registry = require("mason-registry")
 local tools, formatters, formatters_by_ft = {}, {}, {}

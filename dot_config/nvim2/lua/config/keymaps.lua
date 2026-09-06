@@ -30,3 +30,7 @@ end, { desc = "Find files (project)" })
 vim.keymap.set("n", "<leader>/", function()
   require("snacks").picker.grep({ cwd = navigation_root() })
 end, { desc = "Search text (project)" })
+
+vim.keymap.set("n", "<leader>sR", function()
+  require("snacks").picker.resume()
+end, { desc = "Resume last picker" })
