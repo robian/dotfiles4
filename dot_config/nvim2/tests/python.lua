@@ -43,12 +43,12 @@ end
 
 local ok, err = xpcall(function()
   local plain, file = fixture("default")
-  equal(python.select(file).server, "pyright")
+  equal(python.select(file).server, "basedpyright")
   equal(python.select(file).root, plain)
   write(tmp .. "/standalone/example.py", "x = 1")
   local standalone = tmp .. "/standalone/example.py"
   equal(python.select(standalone).root, nil)
-  equal(python.select(standalone).server, "pyright")
+  equal(python.select(standalone).server, "basedpyright")
   equal(project.root("/unlikely-nvim-test-dir/file.py", {}), nil)
   local _, based = fixture("based", {
     ["pyproject.toml"] = '[dependency-groups]\ndev = [\n "basedpyright>=1", # comment\n]\n[tool.pyright]\ntypeCheckingMode="strict"',
@@ -70,7 +70,7 @@ local ok, err = xpcall(function()
   equal(python.select(requirements).server, "basedpyright")
   local _, ignored =
     fixture("ignored", { ["uv.lock"] = 'name="ty"', ["pyproject.toml"] = '# [tool.ty]\n[project]\nname="ty"' })
-  equal(python.select(ignored).server, "pyright")
+  equal(python.select(ignored).server, "basedpyright")
   local _, legacy = fixture("legacy", {
     ["pyrightconfig.json"] = "{ // JSONC is delegated to the server\n}",
     ["pyproject.toml"] = '[project]\ndependencies=["basedpyright"]',
@@ -101,7 +101,7 @@ local ok, err = xpcall(function()
   local nested_python = environment(mono .. "/packages/a")
   equal(python.select(mono .. "/packages/a/src/a.py").python, nested_python)
   vim.fn.mkdir(mono .. "/vendor/b/.git", "p")
-  equal(python.select(mono .. "/vendor/b/b.py").server, "pyright")
+  equal(python.select(mono .. "/vendor/b/b.py").server, "basedpyright")
   equal(python.select(mono .. "/vendor/b/b.py").python, nil)
   vim.fn.chdir(mono)
   equal(python.select(based).server, "basedpyright") -- unrelated :pwd
@@ -148,7 +148,7 @@ local ok, err = xpcall(function()
   local settings = { root_dir = plain, settings = { python = { analysis = { diagnosticMode = "openFilesOnly" } } } }
   local original_settings = settings.settings
   local p = environment(plain)
-  vim.lsp.config.pyright.before_init({}, settings)
+  vim.lsp.config.basedpyright.before_init({}, settings)
   equal(settings.settings.python.pythonPath, p)
   equal(settings.settings == original_settings, true)
   equal(settings.settings.python.analysis.diagnosticMode, "openFilesOnly")
@@ -158,7 +158,7 @@ local ok, err = xpcall(function()
   vim.lsp.config.ty.before_init({}, settings)
   equal(settings.settings.ty.configuration.environment.python, t)
   settings = { settings = {} }
-  vim.lsp.config.pyright.before_init({}, settings)
+  vim.lsp.config.basedpyright.before_init({}, settings)
   equal(settings.settings, {}) -- standalone startup must not inspect :pwd
 
   -- Replacing a registered module with a new checker should be sufficient:

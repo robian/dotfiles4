@@ -14,8 +14,8 @@ local ok, err = xpcall(function()
   -- because a diagnostic arrived once: it must survive startup settling.
   vim.wait(2000, function() return false end, 100)
   local clients = vim.lsp.get_clients({ bufnr = 0 })
-  assert(#clients == 2, "Expected Pyright and Ruff")
-  for _, name in ipairs({ "pyright", "ruff" }) do
+  assert(#clients == 2, "Expected Basedpyright and Ruff")
+  for _, name in ipairs({ "basedpyright", "ruff" }) do
     local client = vim.lsp.get_clients({ bufnr = 0, name = name })[1]
     assert(client and client.initialized, "Expected initialized " .. name)
     assert(client.config.root_dir == nil, "Standalone file acquired a project root")

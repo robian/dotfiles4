@@ -5,7 +5,13 @@ local ok, err = xpcall(function()
   for _, checker in ipairs({ "pyright", "basedpyright", "ty" }) do
     local root = tmp .. "/" .. checker
     vim.fn.mkdir(root, "p")
-    vim.fn.writefile({ "[tool." .. checker .. "]", "[tool.ruff.lint]", 'select = ["F401"]' }, root .. "/pyproject.toml")
+    vim.fn.writefile({
+      "[dependency-groups]",
+      'dev=["' .. checker .. '"]',
+      "[tool." .. checker .. "]",
+      "[tool.ruff.lint]",
+      'select = ["F401"]',
+    }, root .. "/pyproject.toml")
     local lines = { "import os", 'answer:int= "wrong"' }
     local file = root .. "/main.py"
     vim.fn.writefile(lines, file)

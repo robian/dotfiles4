@@ -1,5 +1,8 @@
 require("mason").setup()
 
+-- Show hints from supporting servers in existing and newly opened buffers.
+vim.lsp.inlay_hint.enable(true)
+
 local python = require("config.python")
 python.setup()
 require("config.python.ruff").setup()

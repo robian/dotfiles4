@@ -5,7 +5,7 @@
 local tmp = vim.fn.tempname()
 vim.fn.mkdir(tmp, "p")
 local cases = {
-  { name = "pyright", config = '[tool.pyright]\ntypeCheckingMode="basic"' },
+  { name = "pyright", config = '[dependency-groups]\ndev=["pyright"]\n[tool.pyright]\ntypeCheckingMode="basic"' },
   { name = "basedpyright", config = '[tool.basedpyright]\ntypeCheckingMode="basic"' },
   { name = "ty", config = "[tool.ty]" },
 }

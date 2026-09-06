@@ -2,6 +2,7 @@ require("vim._core.ui2").enable({})
 
 require("config.options")
 require("config.plugins")
+require("config.snacks")
 require("config.theme")
 require("config.treesitter")
 require("config.completion")

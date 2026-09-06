@@ -34,6 +34,10 @@
       "rev": "9cb125de42c0256ed1bc1f9ded8d8f0381317a17",
       "src": "https://github.com/mrcjkb/rustaceanvim",
       "version": "9.0.0 - 10.0.0"
+    },
+    "snacks.nvim": {
+      "rev": "882c996cf28183f4d63640de0b4c02ec886d01f2",
+      "src": "https://github.com/folke/snacks.nvim"
     }
   }
 }

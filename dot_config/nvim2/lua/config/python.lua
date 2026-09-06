@@ -9,7 +9,7 @@ local checkers = {
   require("config.python.basedpyright"),
   require("config.python.pyright"),
 }
-local fallback = "pyright"
+local fallback = "basedpyright"
 local M = { servers = {} }
 local by_name = {}
 local markers = vim.deepcopy(python_project.markers)
@@ -64,7 +64,8 @@ function M.select(filename)
       )
     end
     checker = by_name[matches[1] or fallback]
-    reason = matches[1] and "project tool configuration/dependency" or "Pyright default (no unambiguous alternative)"
+    reason = matches[1] and "project tool configuration/dependency"
+      or (fallback .. " default (no unambiguous alternative)")
   end
 
   return {
