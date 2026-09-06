@@ -29,6 +29,11 @@
       "rev": "41416e81a6c7f4af4984395bfe0cd8d174e70976",
       "src": "https://github.com/nvim-treesitter/nvim-treesitter",
       "version": "'main'"
+    },
+    "rustaceanvim": {
+      "rev": "9cb125de42c0256ed1bc1f9ded8d8f0381317a17",
+      "src": "https://github.com/mrcjkb/rustaceanvim",
+      "version": "9.0.0 - 10.0.0"
     }
   }
 }

@@ -2,6 +2,7 @@
 local languages = {
   lua = require("config.formatting.lua"),
   python = require("config.formatting.python"),
+  rust = require("config.formatting.rust"),
 }
 local conform = require("conform")
 local registry = require("mason-registry")

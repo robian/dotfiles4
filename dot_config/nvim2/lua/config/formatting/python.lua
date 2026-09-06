@@ -1,30 +1,22 @@
 local project = require("util.project")
 local python_project = require("config.python.project")
-local M = {
-  tools = {
-    require("config.formatting.python.ruff"),
-    require("config.formatting.python.black"),
-  },
-}
-local by_name = {}
+local ruff = require("config.formatting.python.ruff")
+local M = { tools = { ruff } }
 local markers = vim.deepcopy(python_project.markers)
 -- Typechecker-only projects are still boundaries for formatting policy.
 vim.list_extend(markers, { "pyrightconfig.json", "ty.toml" })
-for _, tool in ipairs(M.tools) do
-  by_name[tool.name] = tool
-  vim.list_extend(markers, tool.markers)
-end
+vim.list_extend(markers, ruff.markers)
 
 -- Saving requires formatter-specific project configuration or an explicit
--- .nvim.json override: {"python":{"formatter":"ruff"}} (also "black"/false).
+-- .nvim.json override: {"python":{"formatter":"ruff"}} (or false to disable).
 -- Dependencies, locks, generic Ruff/lint settings and installed tools are not
 -- formatting policy. We don't infer policy from CI/pre-commit or resolve Ruff
 -- extends ourselves; an override can express policy that lives there.
 -- The nearest project wins; no policy never enables formatting on save.
--- :Format may fall back to Ruff, but never bypasses conflicts or explicit false.
+-- :Format may fall back to Ruff, but never bypasses invalid overrides or false.
 function M.select(filename, manual)
   local root = filename ~= "" and project.root(filename, markers) or nil
-  local choice
+  local policy = false
   if root then
     local override = project.get(project.read(vim.fs.joinpath(root, ".nvim.json")), "python") or {}
     if type(override) ~= "table" then
@@ -33,28 +25,16 @@ function M.select(filename, manual)
     if override.formatter == false then
       return { disabled = true, root = root, reason = "Python formatting is disabled in .nvim.json" }
     elseif override.formatter ~= nil then
-      choice = by_name[override.formatter]
-      if not choice then
-        error(root .. ": python.formatter must be ruff, black or false")
+      if override.formatter ~= "ruff" then
+        error(root .. ": python.formatter must be ruff or false")
       end
+      policy = true
     else
-      local context = python_project.new(root)
-      local matches = {}
-      for _, tool in ipairs(M.tools) do
-        if tool.detect(context) then
-          matches[#matches + 1] = tool.name
-        end
-      end
-      if #matches > 1 then
-        error(root .. ": conflicting Python formatters; set python.formatter in .nvim.json")
-      end
-      choice = by_name[matches[1]]
+      policy = ruff.detect(python_project.new(root))
     end
   end
-  local policy = choice ~= nil
-  choice = choice or (manual and by_name.ruff or nil)
-  if choice then
-    return { formatter = choice.formatter, root = root, policy = policy }
+  if policy or manual then
+    return { formatter = ruff.formatter, root = root, policy = policy }
   end
 end
 
@@ -103,9 +83,6 @@ function M.command(name)
   end
 end
 
-M.formatters = {}
-for _, tool in ipairs(M.tools) do
-  M.formatters[tool.formatter] = { command = M.command(tool.name) }
-end
+M.formatters = { [ruff.formatter] = { command = M.command(ruff.name) } }
 
 return M

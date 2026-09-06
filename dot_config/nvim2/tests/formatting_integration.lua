@@ -27,14 +27,28 @@ local ok, err = xpcall(function()
       files = { ["pyproject.toml"] = { "[tool.ruff.format]", 'quote-style="single"' } },
       expected = "x = {'a': 1}",
     },
-    { name = "black", files = { ["pyproject.toml"] = { "[tool.black]" } }, expected = 'x = {"a": 1}' },
+    { name = "black-only", files = { ["pyproject.toml"] = { "[tool.black]" } }, manual = true },
     {
       name = "override",
-      files = { [".nvim.json"] = { '{"python":{"formatter":"black"}}' } },
+      files = { [".nvim.json"] = { '{"python":{"formatter":"ruff"}}' } },
       expected = 'x = {"a": 1}',
     },
     { name = "excluded", files = { ["ruff.toml"] = { 'exclude=["main.py"]', "[format]" } } },
-    { name = "conflict", files = { ["pyproject.toml"] = { "[tool.black]", "[tool.ruff.format]" } }, blocked = true },
+    {
+      name = "black-and-ruff",
+      files = { ["pyproject.toml"] = { "[tool.black]", "[tool.ruff.format]" } },
+      expected = 'x = {"a": 1}',
+    },
+    {
+      name = "unsupported-override",
+      files = { [".nvim.json"] = { '{"python":{"formatter":"black"}}' } },
+      blocked = true,
+    },
+    {
+      name = "installed-dependency",
+      files = { ["pyproject.toml"] = { "[tool.ruff.format]" } },
+      path = ".venv/lib/python3.14/site-packages/example/main.py",
+    },
     { name = "disabled", files = { [".nvim.json"] = { '{"python":{"formatter":false}}' } }, blocked = true },
   }
   for _, case in ipairs(cases) do
@@ -43,7 +57,7 @@ local ok, err = xpcall(function()
       write(root .. "/" .. name, lines)
     end
     local original = 'x=  {"a":1}'
-    local path = root .. "/main.py"
+    local path = root .. "/" .. (case.path or "main.py")
     write(path, { original })
     write(root .. "/sibling.py", { original })
     vim.cmd.edit(vim.fn.fnameescape(path))
@@ -68,8 +82,7 @@ local ok, err = xpcall(function()
         return false
       end)
       assert(vim.api.nvim_get_current_line() == original, "Blocked project was formatted")
-      -- Conflict warnings may already have been emitted once during save.
-      assert(#notifications > count or case.name == "conflict", "Missing disabled-policy explanation")
+      assert(#notifications > count, "Missing disabled-policy explanation")
     end
     assert(vim.fn.readfile(root .. "/sibling.py")[1] == original, "Another file was formatted")
     print(case.name .. ": passed")

@@ -23,15 +23,16 @@ local ok, err = xpcall(function()
     { { ["pyproject.toml"] = '[project]\ndependencies=["ruff", "black"]' }, nil },
     { { ["pyproject.toml"] = "[tool.ruff]\nline-length=100" }, nil },
     { { ["ruff.toml"] = '[lint]\nselect=["E"]' }, nil },
-    { { ["pyproject.toml"] = "[tool.black]" }, "black" },
+    { { ["pyproject.toml"] = "[tool.black]" }, nil },
     { { ["pyproject.toml"] = "[tool.ruff.format]" }, "ruff_format" },
     { { ["ruff.toml"] = "[format]" }, "ruff_format" },
     { { [".ruff.toml"] = "[format]" }, "ruff_format" },
-    { { ["pyproject.toml"] = "[tool.black]\n[tool.ruff.lint]" }, "black" },
+    { { ["pyproject.toml"] = "[tool.black]\n[tool.ruff.lint]" }, nil },
+    { { ["pyproject.toml"] = "[tool.black]\n[tool.ruff.format]" }, "ruff_format" },
     -- The higher-priority Ruff file shadows lower-priority format settings.
     { { ["pyproject.toml"] = "[tool.ruff.format]", ["ruff.toml"] = "[lint]" }, nil },
     { { ["ruff.toml"] = "[format]", [".ruff.toml"] = "[lint]" }, nil },
-    { { [".nvim.json"] = '{"python":{"formatter":"black"}}' }, "black" },
+    { { [".nvim.json"] = '{"python":{"formatter":"ruff"}}' }, "ruff_format" },
   }
   for i, case in ipairs(cases) do
     local root = tmp .. "/case" .. i
@@ -43,8 +44,8 @@ local ok, err = xpcall(function()
     equal(choice and choice.formatter, case[2])
     equal(python.select(root .. "/main.py", true).formatter, case[2] or "ruff_format")
   end
-  local root = tmp .. "/conflict"
-  write(root .. "/pyproject.toml", "[tool.black]\n[tool.ruff.format]")
+  local root = tmp .. "/override"
+  write(root .. "/.nvim.json", '{"python":{"formatter":"black"}}')
   fails(function()
     python.select(root .. "/main.py", false)
   end)
@@ -72,7 +73,7 @@ local ok, err = xpcall(function()
 
   local mono = tmp .. "/mono"
   vim.fn.mkdir(mono .. "/.git", "p")
-  write(mono .. "/pyproject.toml", "[tool.black]")
+  write(mono .. "/pyproject.toml", "[tool.ruff.format]")
   write(mono .. "/child/pyproject.toml", "[project]")
   equal(python.select(mono .. "/child/main.py", false), nil)
   vim.fn.chdir(mono)
@@ -83,14 +84,14 @@ local ok, err = xpcall(function()
     write(path, "#!/bin/sh\nexit 0")
     vim.fn.setfperm(path, "rwx------")
   end
-  executable(mono .. "/.venv/bin/black")
-  local command = python.command("black")
-  equal(command(nil, { filename = mono .. "/child/main.py" }), mono .. "/.venv/bin/black")
+  executable(mono .. "/.venv/bin/ruff")
+  local command = python.command("ruff")
+  equal(command(nil, { filename = mono .. "/child/main.py" }), mono .. "/.venv/bin/ruff")
   vim.fn.mkdir(mono .. "/child/.git", "p")
-  equal(command(nil, { filename = mono .. "/child/main.py" }), "black")
-  executable(mono .. "/custom/bin/black")
+  equal(command(nil, { filename = mono .. "/child/main.py" }), "ruff")
+  executable(mono .. "/custom/bin/ruff")
   write(mono .. "/.nvim.json", '{"python":{"venv":"custom"}}')
-  equal(command(nil, { filename = mono .. "/main.py" }), mono .. "/custom/bin/black")
+  equal(command(nil, { filename = mono .. "/main.py" }), mono .. "/custom/bin/ruff")
 
   equal(lua.select(tmp .. "/plain.lua", false), nil)
   equal(lua.select(tmp .. "/plain.lua", true).formatter, "stylua")
