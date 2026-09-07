@@ -1,6 +1,15 @@
 local M = {}
 local cache = {}
 
+local navigation_markers = {
+  ".nvim.json",
+  "pyproject.toml",
+  "setup.py",
+  "setup.cfg",
+  "Cargo.toml",
+  "package.json",
+}
+
 function M.exists(path)
   return vim.uv.fs_stat(path) ~= nil
 end
@@ -31,6 +40,16 @@ function M.root(filename, markers)
     dir = parent
   end
   return nil
+end
+
+-- Use the edited file's nearest project marker or Git boundary. For a
+-- standalone file, browse its directory; an unnamed buffer starts at :pwd.
+function M.navigation_root(bufnr)
+  local filename = vim.api.nvim_buf_get_name(bufnr or 0)
+  if filename == "" then
+    filename = vim.fs.joinpath(vim.fn.getcwd(), "__navigation__")
+  end
+  return M.root(filename, navigation_markers) or vim.fs.dirname(filename)
 end
 
 -- Read data only: never source project Lua or execute pyproject/build scripts.
