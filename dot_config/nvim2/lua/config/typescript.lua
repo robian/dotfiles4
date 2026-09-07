@@ -1,16 +1,16 @@
-local web = require("config.web.project")
+local typescript = require("config.typescript.project")
 local M = { servers = { "vtsls", "eslint", "biome", "tailwindcss" } }
 local filetypes = { "javascript", "javascriptreact", "typescript", "typescriptreact" }
 
 local function root_when(detect, project_root)
   return function(bufnr, on_dir)
-    local ok, context = pcall(web.new, vim.api.nvim_buf_get_name(bufnr))
+    local ok, context = pcall(typescript.new, vim.api.nvim_buf_get_name(bufnr))
     local success, enabled = false, context
     if ok then
       success, enabled = pcall(detect, context)
     end
     if not ok or not success then
-      vim.notify_once(tostring(enabled), vim.log.levels.WARN, { title = "Web tooling" })
+      vim.notify_once(tostring(enabled), vim.log.levels.WARN, { title = "TypeScript tooling" })
     elseif enabled then
       on_dir(project_root and project_root(context) or context.root or vim.fs.dirname(vim.api.nvim_buf_get_name(bufnr)))
     end
@@ -93,7 +93,7 @@ function M.setup()
   }) do
     vim.lsp.config(name, {
       cmd = function(dispatchers, config)
-        local context = web.new(vim.fs.joinpath(config.root_dir or vim.fn.getcwd(), "__lsp__"))
+        local context = typescript.new(vim.fs.joinpath(config.root_dir or vim.fn.getcwd(), "__lsp__"))
         return vim.lsp.rpc.start(
           { context.command(command), name == "biome" and "lsp-proxy" or "--stdio" },
           dispatchers

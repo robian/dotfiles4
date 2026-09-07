@@ -4,7 +4,7 @@ local languages = {
   python = require("config.formatting.python"),
   rust = require("config.formatting.rust"),
 }
-local web = require("config.formatting.web")
+local typescript = require("config.formatting.typescript")
 for _, ft in ipairs({
   "javascript",
   "javascriptreact",
@@ -16,7 +16,7 @@ for _, ft in ipairs({
   "jsonc",
   "html",
 }) do
-  languages[ft] = web
+  languages[ft] = typescript
 end
 local conform = require("conform")
 local registry = require("mason-registry")

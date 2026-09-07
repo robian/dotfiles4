@@ -1,23 +1,23 @@
 local project = require("util.project")
-local web = require("config.web.project")
+local typescript = require("config.typescript.project")
 local M = {
-  tools = { require("config.formatting.web.prettier"), require("config.formatting.web.biome") },
+  tools = { require("config.formatting.typescript.prettier"), require("config.formatting.typescript.biome") },
 }
 
 -- Configs declare policy; neither a dependency nor ESLint lint rules imply
 -- formatting. Two applicable formatters are ambiguous:
--- resolve with .nvim.json {"web":{"formatter":"prettier"|"biome"|false}}.
+-- resolve with .nvim.json {"typescript":{"formatter":"prettier"|"biome"|false}}.
 -- This also expresses policy held in external scripts/configuration. With no
 -- policy, saves do nothing and :Format explicitly falls back to Prettier.
 function M.select(filename, manual)
-  local context = web.new(filename)
+  local context = typescript.new(filename)
   local override_path = context.find({ ".nvim.json" })
-  local override = override_path and project.get(project.read(override_path), "web") or {}
+  local override = override_path and project.get(project.read(override_path), "typescript") or {}
   if type(override) ~= "table" then
-    error(".nvim.json web must be an object")
+    error(".nvim.json typescript must be an object")
   end
   if override.formatter == false then
-    return { disabled = true, reason = "Web formatting is disabled in .nvim.json" }
+    return { disabled = true, reason = "TypeScript formatting is disabled in .nvim.json" }
   end
   local matches = {}
   for _, tool in ipairs(M.tools) do
@@ -26,10 +26,10 @@ function M.select(filename, manual)
     end
   end
   if override.formatter ~= nil and #matches == 0 then
-    error("web.formatter must be prettier, biome or false")
+    error("typescript.formatter must be prettier, biome or false")
   end
   if #matches > 1 then
-    error("Both Prettier and Biome configs found; select web.formatter in .nvim.json")
+    error("Both Prettier and Biome configs found; select typescript.formatter in .nvim.json")
   end
   if #matches == 0 and context.find({ "biome.json", "biome.jsonc" }) then
     return { disabled = true, reason = "Biome formatting is disabled or this file is excluded" }
@@ -43,10 +43,10 @@ M.formatters = {}
 for _, tool in ipairs(M.tools) do
   M.formatters[tool.name] = {
     command = function(_, ctx)
-      return web.new(ctx.filename).command(tool.name)
+      return typescript.new(ctx.filename).command(tool.name)
     end,
     cwd = function(_, ctx)
-      return web.new(ctx.filename).root or ctx.dirname
+      return typescript.new(ctx.filename).root or ctx.dirname
     end,
   }
 end
@@ -54,11 +54,11 @@ end
 -- exclusions. Use format, never biome check --write (lint/import fixes).
 M.formatters.biome.args = { "format", "--stdin-file-path", "$FILENAME" }
 M.formatters.biome.cwd = function(_, ctx)
-  local config = web.new(ctx.filename).find({ "biome.json", "biome.jsonc" })
+  local config = typescript.new(ctx.filename).find({ "biome.json", "biome.jsonc" })
   return config and vim.fs.dirname(config) or ctx.dirname
 end
 M.formatters.prettier.prepend_args = function(_, ctx)
-  local context = web.new(ctx.filename)
+  local context = typescript.new(ctx.filename)
   local args = {}
   for _, name in ipairs({ ".gitignore", ".prettierignore" }) do
     local path = context.find({ name })

@@ -1,9 +1,9 @@
--- Set NVIM_WEB_TEST_TOOLS to a directory with node_modules containing:
+-- Set NVIM_TYPESCRIPT_TEST_TOOLS to a directory with node_modules containing:
 -- typescript, eslint, tailwindcss, @types/react, prettier and @biomejs/biome.
 -- NVIM_APPNAME=nvim2 nvim --headless -i NONE -n \
---   '+luafile ~/.config/nvim2/tests/web_integration.lua' '+qa!'
+--   '+luafile ~/.config/nvim2/tests/typescript_integration.lua' '+qa!'
 local tmp = vim.fn.tempname()
-local tools = assert(vim.env.NVIM_WEB_TEST_TOOLS, "Set NVIM_WEB_TEST_TOOLS")
+local tools = assert(vim.env.NVIM_TYPESCRIPT_TEST_TOOLS, "Set NVIM_TYPESCRIPT_TEST_TOOLS")
 local count = 0
 local function check(value, message)
   assert(value, message)
@@ -152,7 +152,7 @@ local ok, err = xpcall(function()
   check(lines(buf) == original, "Disabled Biome formatter modified the buffer")
   write(root .. "/.prettierrc", '{"semi":false}')
   check(
-    require("config.formatting.web").select(root .. "/main.js", false).formatter == "prettier",
+    require("config.formatting.typescript").select(root .. "/main.js", false).formatter == "prettier",
     "Lint-only Biome conflicted with Prettier"
   )
 
@@ -193,4 +193,4 @@ if not ok then
   print(err)
   vim.cmd("cquit 1")
 end
-print("Web integration: " .. count .. " assertions passed")
+print("TypeScript integration: " .. count .. " assertions passed")

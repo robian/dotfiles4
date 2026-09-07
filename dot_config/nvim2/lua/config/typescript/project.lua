@@ -6,7 +6,7 @@ local locks = { "pnpm-workspace.yaml", "pnpm-lock.yaml", "package-lock.json", "y
 -- a monorepo, but never search beyond its Git/workspace boundary or into home.
 function M.new(filename)
   local dir = filename ~= "" and vim.fs.dirname(vim.fs.abspath(filename)) or vim.fn.getcwd()
-  local nearest = project.root(vim.fs.joinpath(dir, "__web__"), {
+  local nearest = project.root(vim.fs.joinpath(dir, "__typescript__"), {
     "package.json",
     "tsconfig.json",
     "jsconfig.json",
