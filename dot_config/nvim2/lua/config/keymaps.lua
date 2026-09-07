@@ -12,6 +12,10 @@ vim.keymap.set("n", "<leader><space>", function()
   require("snacks").picker.files({ cwd = project.navigation_root() })
 end, { desc = "Find files (project)" })
 
+vim.keymap.set("n", "<leader>,", function()
+  require("snacks").picker.buffers()
+end, { desc = "Buffers" })
+
 vim.keymap.set("n", "<leader>/", function()
   require("snacks").picker.grep({ cwd = project.navigation_root() })
 end, { desc = "Search text (project)" })
