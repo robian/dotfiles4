@@ -1,5 +1,5 @@
 [tools]
-codex = { version = "0.153.4", minimum_release_age = "0s" }
+codex = { version = "0.156.1", minimum_release_age = "0s" }
 hunk = "0.22.0"
 neovim = "0.12.5"
 node = "24.16.0"
