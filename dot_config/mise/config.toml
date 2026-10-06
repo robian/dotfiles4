@@ -3,6 +3,7 @@ codex = { version = "0.160.1", minimum_release_age = "0s" }
 hunk = "0.23.0"
 neovim = "0.12.5"
 node = "24.16.0"
+"npm:@playwright/cli" = "latest"
 python = "3.14.8"
 rust = { version = "1.99.0", profile = "default", components = "rust-analyzer" }
 tree-sitter = "0.27.0"
