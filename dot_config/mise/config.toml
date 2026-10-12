@@ -1,11 +1,11 @@
 [tools]
-codex = { version = "0.160.1", minimum_release_age = "0s" }
+codex = { version = "0.162.0", minimum_release_age = "0s" }
 hunk = "0.23.0"
-neovim = "0.12.5"
+neovim = "0.12.6"
 node = "24.16.0"
 "npm:@playwright/cli" = "latest"
 python = "3.14.8"
 rust = { version = "1.99.0", profile = "default", components = "rust-analyzer" }
-tree-sitter = "0.27.0"
-usage = "6.12.0"
+tree-sitter = "0.27.1"
+usage = "6.12.1"
 uv = "0.12.23"
