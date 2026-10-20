@@ -5,7 +5,7 @@ not_found_auto_install = false
 paranoid = true
 
 [tools]
-codex = { version = "0.162.0", minimum_release_age = "0s" }
+codex = { version = "0.163.0", minimum_release_age = "0s" }
 hunk = "0.23.0"
 neovim = "0.12.6"
 node = "24.16.0"
@@ -14,4 +14,4 @@ python = "3.14.8"
 rust = { version = "1.99.0", profile = "default", components = "rust-analyzer" }
 tree-sitter = "0.27.1"
 usage = "6.12.1"
-uv = "0.13.0"
+uv = "0.13.1"
