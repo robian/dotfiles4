@@ -10,8 +10,8 @@ hunk = "0.24.0"
 neovim = "0.12.6"
 node = "24.16.0"
 "npm:@playwright/cli" = "latest"
-python = "3.14.8"
+python = "3.14.9"
 rust = { version = "1.99.1", profile = "default", components = "rust-analyzer" }
 tree-sitter = "0.27.1"
 usage = "7.1.0"
-uv = { version = "0.13.4", minimum_release_age = "0s" }
+uv = { version = "0.13.5", minimum_release_age = "0s" }
